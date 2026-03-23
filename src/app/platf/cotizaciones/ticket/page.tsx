@@ -71,6 +71,23 @@ function money(n: number, ccy: string) {
   }
 }
 
+function decodeBase64Utf8(b64: string) {
+  try {
+    if (typeof atob === 'function') {
+      const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      return new TextDecoder().decode(bytes);
+    }
+    const buf = (globalThis as unknown as { Buffer?: any }).Buffer;
+    if (buf) {
+      const bytes = Uint8Array.from(buf.from(b64, 'base64'));
+      return new TextDecoder().decode(bytes);
+    }
+    return '';
+  } catch {
+    return '';
+  }
+}
+
 function formatDate(date: string | undefined) {
   if (!date) return '';
   const d = new Date(date);
@@ -124,7 +141,7 @@ export default function TicketPage() {
     const d = sp.get('d');
     if (!d) return null;
     try {
-      const json = decodeURIComponent(escape(atob(d)));
+      const json = decodeBase64Utf8(d);
       return JSON.parse(json);
     } catch {
       return null;
