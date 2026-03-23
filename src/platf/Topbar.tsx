@@ -31,7 +31,9 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
 
   const roleLabel = rol ? rol : "—";
   const roleTone =
-    roleLabel.toLowerCase() === "administrador" ? "bg-emerald-50 text-emerald-700" : "bg-zinc-100 text-zinc-700";
+    roleLabel.toLowerCase() === "administrador"
+      ? "bg-red-50 text-red-700 ring-1 ring-red-200/60"
+      : "bg-white/70 text-zinc-700 ring-1 ring-red-200/40";
 
   const visibleItems = useMemo(() => {
     const normalized = items;
@@ -84,7 +86,7 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-20 h-14 border-b border-black/[.08] bg-white">
+    <header className="sticky top-0 z-20 h-14 border-b border-red-200/60 bg-brand-soft">
       <div className="flex h-full w-full items-center justify-between gap-4 px-6">
         <div className="flex min-w-0 items-center gap-2 text-sm">
           <div className="flex items-center gap-2">
@@ -124,8 +126,8 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
               type="button"
               className={
                 open
-                  ? "relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-black/[.06] text-zinc-900 ring-2 ring-black/10 transition-colors"
-                  : "relative inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 transition-colors hover:bg-black/[.04]"
+                  ? "relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-zinc-900 ring-2 ring-red-200/60 transition-colors"
+                  : "relative inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-700 transition-colors hover:bg-white/60"
               }
               aria-label="Notificaciones"
               aria-expanded={open}
@@ -138,7 +140,7 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
               }}
             >
               {unreadCount > 0 ? (
-                <span className="absolute -right-0.5 -top-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-emerald-600 px-1 text-[10px] font-semibold leading-4 text-white">
+                <span className="absolute -right-0.5 -top-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold leading-4 text-white">
                   {unreadCount > 9 ? "9+" : String(unreadCount)}
                 </span>
               ) : null}

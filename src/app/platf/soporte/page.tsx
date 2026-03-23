@@ -239,7 +239,7 @@ export default function SoportePage() {
                         type="button"
                         onClick={() => void submit()}
                         disabled={sending}
-                        className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-60"
+                        className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
                       >
                         Enviar correo
                       </button>

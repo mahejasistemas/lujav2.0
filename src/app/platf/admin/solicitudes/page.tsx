@@ -320,7 +320,7 @@ export default function SolicitudesPage() {
                           <button
                             type="button"
                             onClick={() => void decide(r.id, "approved")}
-                            className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium text-background transition-colors hover:bg-[#383838]"
+                            className="inline-flex h-10 flex-1 items-center justify-center rounded-full bg-brand px-4 text-sm font-medium text-white transition-colors hover:bg-brand-hover"
                           >
                             Aprobar
                           </button>

@@ -305,7 +305,7 @@ export default function RegisterPage() {
 
             <button
               type="submit"
-              className="mt-1 inline-flex h-11 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-60"
+              className="mt-1 inline-flex h-11 items-center justify-center rounded-full bg-brand px-5 text-sm font-medium text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
               aria-busy={status === "loading"}
               disabled={!canSubmit || loadingCatalogs}
             >

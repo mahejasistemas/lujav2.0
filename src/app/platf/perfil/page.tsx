@@ -337,7 +337,7 @@ export default function PerfilPage() {
                 type="button"
                 onClick={() => void saveProfile()}
                 disabled={!canSave || saving}
-                className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-60"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-5 text-sm font-medium text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
               >
                 {saving ? "Guardando..." : "Guardar cambios"}
               </button>

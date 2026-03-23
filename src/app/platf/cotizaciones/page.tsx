@@ -2114,7 +2114,7 @@ export default function CotizacionesPage() {
                       onClick={() => {
                         setStep(2);
                       }}
-                      className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-[#383838]"
+                      className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand-hover"
                     >
                       Siguiente
                     </button>
@@ -2243,7 +2243,7 @@ export default function CotizacionesPage() {
                       <button
                         type="button"
                         onClick={() => setStep(3)}
-                        className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-60"
+                        className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
                         disabled={false}
                       >
                         Siguiente
@@ -3104,7 +3104,7 @@ export default function CotizacionesPage() {
                     <button
                       type="button"
                       onClick={() => setStep(4)}
-                      className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-[#383838]"
+                      className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand-hover"
                       disabled={false}
                     >
                       Siguiente
@@ -3459,7 +3459,7 @@ export default function CotizacionesPage() {
                     <button
                       type="button"
                       onClick={() => setStep(5)}
-                      className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-[#383838]"
+                      className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand-hover"
                     >
                       Siguiente
                     </button>
@@ -3549,7 +3549,7 @@ export default function CotizacionesPage() {
                             ? !(tarifaOrigen || tarifaBaseLabel) || !destino
                             : !tarifa || !tarifaOrigen || !destino
                         }
-                        className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-60"
+                        className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
                       >
                         Copiar cotización
                       </button>
@@ -3849,7 +3849,7 @@ export default function CotizacionesPage() {
                     type="button"
                     onClick={() => setStep(6)}
                     disabled={false}
-                    className="inline-flex h-11 items-center justify-center rounded-full bg-foreground px-6 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-60"
+                    className="inline-flex h-11 items-center justify-center rounded-full bg-brand px-6 text-sm font-medium text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
                   >
                     Siguiente
                   </button>
@@ -3885,7 +3885,7 @@ export default function CotizacionesPage() {
                       type="button"
                       onClick={() => void sendPendingQuote()}
                       disabled={sending || sent}
-                      className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-[#383838] disabled:opacity-60"
+                      className="inline-flex h-10 items-center justify-center rounded-full bg-brand px-5 text-sm font-medium text-white transition-colors hover:bg-brand-hover disabled:opacity-60"
                     >
                       {sent ? "Enviado" : sending ? "Enviando..." : "Enviar"}
                     </button>

@@ -77,7 +77,11 @@ function decodeBase64Utf8(b64: string) {
       const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
       return new TextDecoder().decode(bytes);
     }
-    const buf = (globalThis as unknown as { Buffer?: any }).Buffer;
+    const buf = (
+      globalThis as unknown as {
+        Buffer?: { from: (input: string, encoding: 'base64') => Uint8Array };
+      }
+    ).Buffer;
     if (buf) {
       const bytes = Uint8Array.from(buf.from(b64, 'base64'));
       return new TextDecoder().decode(bytes);
@@ -804,4 +808,3 @@ export default function TicketClient() {
     </div>
   );
 }
-

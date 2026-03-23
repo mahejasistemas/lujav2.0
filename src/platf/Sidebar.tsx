@@ -26,6 +26,12 @@ function Icon({
 }
 
 function Section({ title, items }: { title: string; items: NavItem[] }) {
+  const pathname = usePathname();
+  const isActive = (href: string) => {
+    if (href === "/platf") return pathname === "/platf";
+    return pathname === href || pathname.startsWith(`${href}/`);
+  };
+
   return (
     <div className="px-3">
       <div className="px-2 pb-2 pt-4 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
@@ -36,7 +42,11 @@ function Section({ title, items }: { title: string; items: NavItem[] }) {
           <Link
             key={item.label}
             href={item.href}
-            className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-zinc-700 hover:bg-black/[.04]"
+            className={
+              isActive(item.href)
+                ? "flex items-center gap-2 rounded-lg bg-white/80 px-2 py-2 text-sm font-semibold text-zinc-900 ring-1 ring-red-200/60"
+                : "flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-zinc-700 hover:bg-white/60"
+            }
           >
             {item.icon}
             <span className="flex min-w-0 flex-1 items-center gap-2 leading-5">
@@ -55,7 +65,6 @@ function Section({ title, items }: { title: string; items: NavItem[] }) {
 }
 
 export function Sidebar() {
-  const pathname = usePathname();
   const [isAdmin, setIsAdmin] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
 
@@ -209,17 +218,17 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="w-72 shrink-0 border-r border-black/[.08] bg-white">
-      <div className="h-14 border-b border-black/[.08]" />
+    <aside className="sticky top-0 h-screen w-72 shrink-0 border-r border-red-200/60 bg-brand-soft">
+      <div className="h-14 border-b border-red-200/60 bg-white/60" />
 
-      <div className="h-[calc(100vh-3.5rem)] overflow-y-auto pb-6">
+      <div className="h-[calc(100vh-3.5rem)] overflow-hidden pb-6">
         <Section
           title="Menú"
           items={[
             {
               label: "Alertas",
               href: "/platf",
-              badgeCount: isAdmin && pathname !== "/platf" ? pendingCount : 0,
+              badgeCount: pendingCount,
               icon: (
                 <Icon>
                   <svg

@@ -48,7 +48,7 @@ export function SupabaseStatus() {
         <button
           type="button"
           onClick={() => void check()}
-          className="inline-flex h-10 items-center justify-center rounded-full bg-foreground px-4 text-sm font-medium text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc]"
+          className="inline-flex h-10 items-center justify-center rounded-full bg-brand px-4 text-sm font-medium text-white transition-colors hover:bg-brand-hover dark:hover:bg-brand-hover"
           aria-busy={status === "checking"}
         >
           {status === "checking" ? "Comprobando..." : "Probar conexión"}
