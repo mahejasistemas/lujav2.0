@@ -93,9 +93,9 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
   return (
     <header className="sticky top-0 z-20 h-14 border-b border-brand-hover bg-brand">
       <div className="flex h-full w-full items-center justify-between gap-4 px-6">
-        <div className="flex min-w-0 items-center gap-2 text-sm">
-          <div className="flex items-center gap-2">
-            <Image src="/next.svg" alt="Logo" width={18} height={18} priority />
+        <div className="flex min-w-0 items-center gap-3 text-sm">
+          <div className="flex h-20 w-20 items-center justify-center rounded-xl ">
+            <Image src="/tls.svg" alt="TLS" width={70} height={70} priority />
           </div>
 
           <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden text-white">
