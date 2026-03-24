@@ -3,9 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --brand: #b91c1c;
-  --brand-hover: #991b1b;
-  --brand-soft: #fef2f2;
+  --brand: #dc2626;
+  --brand-hover: #b91c1c;
+  --brand-soft: #fee2e2;
+  --brand-ink: #b91c1c;
 }
 
 @theme inline {
@@ -23,8 +24,9 @@
     --background: #0a0a0a;
     --foreground: #ededed;
     --brand: #ef4444;
-    --brand-hover: #f87171;
-    --brand-soft: #450a0a;
+    --brand-hover: #dc2626;
+    --brand-soft: #3f0a0a;
+    --brand-ink: #fecaca;
   }
 }
 
@@ -32,4 +34,20 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  input,
+  select,
+  textarea {
+    @apply focus-visible:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200/60;
+  }
+
+  table thead {
+    background-color: var(--brand-soft);
+  }
+
+  table thead th {
+    color: var(--brand-ink);
+  }
 }

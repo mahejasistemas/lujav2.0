@@ -1039,13 +1039,11 @@ export default function CotizacionesPage() {
       if (!viewerUserId) return;
       setClientesCatalogLoading(true);
 
-      let query = supabase
+      const query = supabase
         .from("clientes")
         .select("id,nombre_completo,empresa,owner_user_id")
         .order("created_at", { ascending: false })
         .limit(500);
-
-      if (!isAdmin) query = query.eq("owner_user_id", viewerUserId);
 
       const { data, error } = await query;
 

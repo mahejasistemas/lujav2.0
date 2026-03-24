@@ -149,7 +149,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-white md:grid md:grid-cols-2">
-      <aside className="relative hidden overflow-hidden bg-zinc-950 p-12 text-white md:flex md:flex-col md:justify-between">
+      <aside className="relative hidden overflow-hidden bg-brand p-12 text-white md:flex md:flex-col md:justify-between">
         <div className="absolute inset-0 opacity-60 [background:radial-gradient(60rem_40rem_at_10%_10%,rgba(255,255,255,0.14),transparent),radial-gradient(50rem_30rem_at_90%_80%,rgba(255,255,255,0.10),transparent)]" />
         <div className="relative text-xl font-semibold tracking-tight">
           MetaWeb Dev Solutions
@@ -168,10 +168,10 @@ export default function RegisterPage() {
       <main className="flex items-center justify-center px-6 py-10 md:px-10">
         <div className="w-full max-w-md">
           <div className="mb-8 flex flex-col gap-2">
-            <div className="text-sm font-semibold tracking-tight text-black dark:text-zinc-50 md:hidden">
+            <div className="text-sm font-semibold tracking-tight text-brand dark:text-zinc-50 md:hidden">
               MetaWeb Dev Solutions
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight text-black">
+            <h1 className="text-3xl font-semibold tracking-tight text-brand">
               Crear cuenta
             </h1>
             <p className="text-sm text-zinc-600">
@@ -328,7 +328,7 @@ export default function RegisterPage() {
             ¿Ya tienes cuenta?{" "}
             <Link
               href="/login"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              className="font-medium text-brand hover:text-brand-hover dark:text-zinc-50"
             >
               Ingresar
             </Link>

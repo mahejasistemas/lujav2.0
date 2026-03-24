@@ -38,7 +38,6 @@ export default function ClientesPage() {
   const [rol, setRol] = useState("");
   const [nombreCompleto, setNombreCompleto] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
   const [viewerUserId, setViewerUserId] = useState("");
 
   const [rowsLoading, setRowsLoading] = useState(false);
@@ -69,15 +68,13 @@ export default function ClientesPage() {
     setRowsError("");
     setRowsLoading(true);
 
-    let query = supabase
+    const query = supabase
       .from("clientes")
       .select(
         "id,created_at,owner_user_id,avatar_url,nombre_completo,empresa,telefono,correo,pais,region",
       )
       .order("created_at", { ascending: false })
       .limit(500);
-
-    if (!isAdmin) query = query.eq("owner_user_id", viewerUserId);
 
     const { data, error } = await query;
     if (error) {
@@ -100,7 +97,7 @@ export default function ClientesPage() {
 
     setClientes((data as ClienteRow[] | null) ?? []);
     setRowsLoading(false);
-  }, [isAdmin, viewerUserId]);
+  }, [viewerUserId]);
 
   async function onPickAvatarFile(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -263,7 +260,6 @@ export default function ClientesPage() {
       setPuesto(profileRow?.puesto?.nombre ?? "");
       const roleName = profileRow?.puesto?.rol?.nombre ?? "";
       setRol(roleName);
-      setIsAdmin(roleName.toLowerCase() === "administrador");
       setNombreCompleto(fullName);
       setViewerUserId(user.id);
       const baseAvatarUrl =
@@ -338,9 +334,7 @@ export default function ClientesPage() {
                 <h1 className="text-2xl font-semibold text-zinc-900">
                   Clientes
                 </h1>
-                <p className="mt-1 text-sm text-zinc-600">
-                  {isAdmin ? "Gestión de clientes." : "Tus clientes."}
-                </p>
+                <p className="mt-1 text-sm text-zinc-600">Todos los clientes.</p>
               </div>
               <div className="flex flex-wrap items-center justify-end gap-2">
                 <button

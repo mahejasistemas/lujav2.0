@@ -19,7 +19,7 @@ function Icon({
   children: React.ReactNode;
 }) {
   return (
-    <span className="inline-flex h-5 w-5 items-center justify-center text-zinc-500">
+    <span className="inline-flex h-5 w-5 items-center justify-center text-white/80">
       {children}
     </span>
   );
@@ -34,7 +34,7 @@ function Section({ title, items }: { title: string; items: NavItem[] }) {
 
   return (
     <div className="px-3">
-      <div className="px-2 pb-2 pt-4 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+      <div className="px-2 pb-2 pt-4 text-[10px] font-semibold uppercase tracking-wider text-white/70">
         {title}
       </div>
       <nav className="flex flex-col gap-1">
@@ -44,15 +44,15 @@ function Section({ title, items }: { title: string; items: NavItem[] }) {
             href={item.href}
             className={
               isActive(item.href)
-                ? "flex items-center gap-2 rounded-lg bg-white/80 px-2 py-2 text-sm font-semibold text-zinc-900 ring-1 ring-red-200/60"
-                : "flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-zinc-700 hover:bg-white/60"
+                ? "flex items-center gap-2 rounded-lg bg-white/20 px-2 py-2 text-sm font-semibold text-white ring-1 ring-white/15"
+                : "flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-medium text-white/90 hover:bg-white/15"
             }
           >
             {item.icon}
             <span className="flex min-w-0 flex-1 items-center gap-2 leading-5">
               <span className="truncate">{item.label}</span>
               {typeof item.badgeCount === "number" && item.badgeCount > 0 ? (
-                <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 text-[11px] font-semibold text-white">
+                <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1.5 text-[11px] font-semibold text-brand">
                   {item.badgeCount > 99 ? "99+" : item.badgeCount}
                 </span>
               ) : null}
@@ -218,8 +218,8 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="sticky top-0 h-screen w-72 shrink-0 border-r border-red-200/60 bg-brand-soft">
-      <div className="h-14 border-b border-red-200/60 bg-white/60" />
+    <aside className="sticky top-0 h-screen w-72 shrink-0 border-r border-brand-hover bg-brand">
+      <div className="h-14 border-b border-white/15 bg-brand" />
 
       <div className="h-[calc(100vh-3.5rem)] overflow-hidden pb-6">
         <Section
@@ -327,8 +327,24 @@ export function Sidebar() {
               ),
             },
             {
+              label: "CP",
+              href: "/platf/cp",
+              icon: (
+                <Icon>
+                  <svg
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className="h-4 w-4"
+                    aria-hidden="true"
+                  >
+                    <path d="M4 4a2 2 0 0 1 2-2h6.586a2 2 0 0 1 1.414.586L16.414 4A2 2 0 0 1 17 5.414V16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4Zm8 0H6v12h9V7h-3a1 1 0 0 1-1-1V4Z" />
+                  </svg>
+                </Icon>
+              ),
+            },
+            {
               label: "Estadísticas",
-              href: "/platf",
+              href: "/platf/estadisticas",
               icon: (
                 <Icon>
                   <svg

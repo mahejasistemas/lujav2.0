@@ -17,7 +17,7 @@ type TopbarProps = {
 export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarProps) {
   const { items, unreadCount, markAllRead, clear } = useNotifications();
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<"nuevas" | "confirmadas" | "rechazadas">(
+  const [tab, setTab] = useState<"nuevas" | "confirmadas" | "rechazadas" | "cp">(
     "nuevas",
   );
   const [now, setNow] = useState(() => Date.now());
@@ -32,8 +32,8 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
   const roleLabel = rol ? rol : "—";
   const roleTone =
     roleLabel.toLowerCase() === "administrador"
-      ? "bg-red-50 text-red-700 ring-1 ring-red-200/60"
-      : "bg-white/70 text-zinc-700 ring-1 ring-red-200/40";
+      ? "bg-white/20 text-white ring-1 ring-white/15"
+      : "bg-white/15 text-white/90 ring-1 ring-white/10";
 
   const visibleItems = useMemo(() => {
     const normalized = items;
@@ -46,7 +46,11 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
       return normalized.filter((n) => n.variant === "success").slice(0, 10);
     }
 
-    return normalized.filter((n) => n.variant === "error").slice(0, 10);
+    if (tab === "rechazadas") {
+      return normalized.filter((n) => n.variant === "error").slice(0, 10);
+    }
+
+    return normalized.filter((n) => n.variant === "info").slice(0, 10);
   }, [items, tab]);
 
   const tabCounts = useMemo(() => {
@@ -54,6 +58,7 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
       nuevas: unreadCount,
       confirmadas: items.filter((n) => n.variant === "success").length,
       rechazadas: items.filter((n) => n.variant === "error").length,
+      cp: items.filter((n) => n.variant === "info").length,
     };
   }, [items, unreadCount]);
 
@@ -86,25 +91,27 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-20 h-14 border-b border-red-200/60 bg-brand-soft">
+    <header className="sticky top-0 z-20 h-14 border-b border-brand-hover bg-brand">
       <div className="flex h-full w-full items-center justify-between gap-4 px-6">
         <div className="flex min-w-0 items-center gap-2 text-sm">
           <div className="flex items-center gap-2">
             <Image src="/next.svg" alt="Logo" width={18} height={18} priority />
           </div>
 
-          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden text-zinc-800">
+          <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden text-white">
             <span className="min-w-0 truncate font-medium">
               {base ? base : "—"}
             </span>
-            <span className="text-zinc-300">/</span>
-            <span className="min-w-0 truncate">{puesto ? puesto : "—"}</span>
-            <span className="text-zinc-300">/</span>
-            <span className="min-w-0 truncate">{nombreCompleto ? nombreCompleto : "—"}</span>
+            <span className="text-white/50">/</span>
+            <span className="min-w-0 truncate text-white/90">{puesto ? puesto : "—"}</span>
+            <span className="text-white/50">/</span>
+            <span className="min-w-0 truncate text-white/90">
+              {nombreCompleto ? nombreCompleto : "—"}
+            </span>
           </div>
 
           <svg
-            className="h-4 w-4 shrink-0 text-zinc-400"
+            className="h-4 w-4 shrink-0 text-white/70"
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -126,8 +133,8 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
               type="button"
               className={
                 open
-                  ? "relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-zinc-900 ring-2 ring-red-200/60 transition-colors"
-                  : "relative inline-flex h-9 w-9 items-center justify-center rounded-full text-zinc-700 transition-colors hover:bg-white/60"
+                  ? "relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-white ring-2 ring-white/20 transition-colors"
+                  : "relative inline-flex h-9 w-9 items-center justify-center rounded-full text-white/90 transition-colors hover:bg-white/15"
               }
               aria-label="Notificaciones"
               aria-expanded={open}
@@ -140,7 +147,7 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
               }}
             >
               {unreadCount > 0 ? (
-                <span className="absolute -right-0.5 -top-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-semibold leading-4 text-white">
+                <span className="absolute -right-0.5 -top-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-white px-1 text-[10px] font-semibold leading-4 text-brand">
                   {unreadCount > 9 ? "9+" : String(unreadCount)}
                 </span>
               ) : null}
@@ -196,18 +203,18 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
                   </div>
 
                   <div className="px-4 pb-4">
-                    <div className="flex items-center gap-2 rounded-xl bg-zinc-100 p-1 text-xs font-semibold text-zinc-600">
+                    <div className="flex items-center gap-2 rounded-xl bg-brand-soft p-1 text-xs font-semibold text-zinc-700 ring-1 ring-red-200/60">
                       <button
                         type="button"
                         className={
                           tab === "nuevas"
-                            ? "flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-zinc-900 shadow-sm"
+                            ? "flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-zinc-900 shadow-sm ring-1 ring-red-200/60"
                             : "flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-white/60"
                         }
                         onClick={() => setTab("nuevas")}
                       >
                         Nuevas
-                        <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-[10px] text-zinc-700">
+                        <span className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] text-red-700 ring-1 ring-red-200/60">
                           {tabCounts.nuevas}
                         </span>
                       </button>
@@ -215,13 +222,13 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
                         type="button"
                         className={
                           tab === "confirmadas"
-                            ? "flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-zinc-900 shadow-sm"
+                            ? "flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-zinc-900 shadow-sm ring-1 ring-red-200/60"
                             : "flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-white/60"
                         }
                         onClick={() => setTab("confirmadas")}
                       >
                         Confirmadas
-                        <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-[10px] text-zinc-700">
+                        <span className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] text-red-700 ring-1 ring-red-200/60">
                           {tabCounts.confirmadas}
                         </span>
                       </button>
@@ -229,14 +236,28 @@ export function Topbar({ base, puesto, rol, nombreCompleto, avatarUrl }: TopbarP
                         type="button"
                         className={
                           tab === "rechazadas"
-                            ? "flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-zinc-900 shadow-sm"
+                            ? "flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-zinc-900 shadow-sm ring-1 ring-red-200/60"
                             : "flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-white/60"
                         }
                         onClick={() => setTab("rechazadas")}
                       >
                         Rechazadas
-                        <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-[10px] text-zinc-700">
+                        <span className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] text-red-700 ring-1 ring-red-200/60">
                           {tabCounts.rechazadas}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        className={
+                          tab === "cp"
+                            ? "flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-zinc-900 shadow-sm ring-1 ring-red-200/60"
+                            : "flex items-center gap-2 rounded-lg px-3 py-2 hover:bg-white/60"
+                        }
+                        onClick={() => setTab("cp")}
+                      >
+                        Cp
+                        <span className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] text-red-700 ring-1 ring-red-200/60">
+                          {tabCounts.cp}
                         </span>
                       </button>
                     </div>

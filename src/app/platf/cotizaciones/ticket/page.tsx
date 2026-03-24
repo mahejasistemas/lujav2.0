@@ -4,7 +4,7 @@ import TicketClient from './TicketClient';
 
 export default function TicketPage() {
   return (
-    <Suspense fallback={<div className="p-6 text-sm text-zinc-600">Cargando...</div>}>
+    <Suspense fallback={null}>
       <TicketClient />
     </Suspense>
   );

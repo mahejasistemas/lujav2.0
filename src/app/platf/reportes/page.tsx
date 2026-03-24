@@ -127,12 +127,10 @@ export default function ReportesPage() {
       .limit(500);
 
     if (!isAdmin && viewerUserId) {
-      query = query
-        .eq("enviado_por_user_id", viewerUserId)
-        .in("status", ["aceptada", "exitosa"]);
-    } else {
-      query = query.eq("status", "aceptada");
+      query = query.eq("enviado_por_user_id", viewerUserId);
     }
+
+    query = query.in("status", ["aceptada", "aceptadas", "exitosa"]);
 
     const fromIso = toStartOfDayIso(dateFrom);
     if (fromIso) query = query.gte("created_at", fromIso);
@@ -168,99 +166,6 @@ export default function ReportesPage() {
     return s === "aceptada" || s === "exitosa" || s === "no_exitosa";
   }
 
-  function buildTicketHtml(row: PendingRow, payload: PayloadShape | null) {
-    const p = payload ?? null;
-    const divisa = asString(p?.divisa) || row.moneda || "MXN";
-    const montos = asRecord(p?.montos);
-    const total = asNumber(montos?.total) || row.total || 0;
-    const created = row.created_at
-      ? new Date(row.created_at).toLocaleString("es-MX")
-      : "—";
-
-    const title = `Ticket de cotización ${row.folio || "—"}`;
-    const esc = (v: unknown) =>
-      String(v ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
-
-    return `<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${esc(title)}</title>
-  <style>
-    :root { color-scheme: light; }
-    body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; margin: 0; background: #f4f4f5; color: #18181b; }
-    .page { max-width: 860px; margin: 0 auto; padding: 24px; }
-    .card { background: white; border: 1px solid rgba(0,0,0,.08); border-radius: 16px; overflow: hidden; }
-    .header { padding: 18px 18px; background: #fafafa; border-bottom: 1px solid rgba(0,0,0,.08); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .h1 { font-size: 18px; font-weight: 700; margin: 0; }
-    .meta { font-size: 12px; color: #52525b; }
-    .content { padding: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .item { border: 1px solid rgba(0,0,0,.08); border-radius: 14px; padding: 12px; }
-    .k { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #71717a; }
-    .v { margin-top: 6px; font-size: 14px; font-weight: 600; }
-    .total { grid-column: 1 / -1; background: #fafafa; }
-    .total .v { font-size: 22px; }
-    .foot { padding: 14px 18px; border-top: 1px solid rgba(0,0,0,.08); font-size: 12px; color: #52525b; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-    @media print { body { background: white; } .page { padding: 0; } .card { border: 0; } }
-  </style>
-</head>
-<body>
-  <div class="page">
-    <div class="card">
-      <div class="header">
-        <div>
-          <p class="h1">${esc(title)}</p>
-          <div class="meta">${esc(created)}</div>
-        </div>
-        <div class="meta">
-          Estatus: <strong>${esc(statusNormalized(row.status))}</strong>
-        </div>
-      </div>
-      <div class="content">
-        <div class="item">
-          <div class="k">Empresa</div>
-          <div class="v">${esc(asString(p?.empresa) || "—")}</div>
-        </div>
-        <div class="item">
-          <div class="k">Cliente</div>
-          <div class="v">${esc(asString(p?.cliente) || "—")}</div>
-        </div>
-        <div class="item">
-          <div class="k">Ruta</div>
-          <div class="v">${esc(`${row.origen} → ${row.destino}`)}</div>
-        </div>
-        <div class="item">
-          <div class="k">Emite</div>
-          <div class="v">${esc(asString(p?.emitidaPor) || row.enviado_por || "—")}</div>
-        </div>
-        <div class="item">
-          <div class="k">Correo</div>
-          <div class="v">${esc(asString(p?.correoEmitente) || "—")}</div>
-        </div>
-        <div class="item">
-          <div class="k">Vigencia</div>
-          <div class="v">${esc(`${asString(p?.fechaEmision) || "—"} → ${asString(p?.fechaCaducidad) || "—"}`)}</div>
-        </div>
-        <div class="item total">
-          <div class="k">Total (sin impuestos)</div>
-          <div class="v">${esc(formatMoney(total, divisa))}</div>
-        </div>
-      </div>
-      <div class="foot">
-        <div>Folio: <strong>${esc(row.folio || "—")}</strong></div>
-        <div>ID: <strong>${esc(row.id)}</strong></div>
-      </div>
-    </div>
-  </div>
-</body>
-</html>`;
-  }
-
   async function downloadTicket(row: PendingRow) {
     if (!canDownloadTicket(row.status)) return;
     setTicketLoadingId(row.id);
@@ -291,13 +196,41 @@ export default function ReportesPage() {
       }
     }
 
-    const payload = ((data as { payload?: unknown }).payload as PayloadShape | null) ?? null;
-    const html = buildTicketHtml(data as PendingRow, payload);
-    downloadFile(
-      `ticket-${String((data as { folio?: string }).folio ?? "cotizacion")}.html`,
-      html,
-      "text/html",
-    );
+    const payload =
+      (((data as { payload?: unknown }).payload as PayloadShape | null) ??
+        null) as unknown;
+    const base =
+      (typeof structuredClone === "function"
+        ? structuredClone(payload ?? {})
+        : JSON.parse(JSON.stringify(payload ?? {}))) as Record<string, unknown>;
+
+    base.folio =
+      (data as PendingRow).folio ??
+      asString((base as { folio?: unknown }).folio);
+    base.tarifaOrigen =
+      (data as PendingRow).origen ??
+      asString((base as { tarifaOrigen?: unknown }).tarifaOrigen);
+    base.destino =
+      (data as PendingRow).destino ??
+      asString((base as { destino?: unknown }).destino);
+    base.divisa =
+      (data as PendingRow).moneda ??
+      asString((base as { divisa?: unknown }).divisa) ??
+      "MXN";
+
+    const montos =
+      (asRecord((base as { montos?: unknown }).montos) || {}) as Record<
+        string,
+        unknown
+      >;
+    const total = asNumber(montos.total) || (data as PendingRow).total || 0;
+    montos.total = total;
+    (base as { montos?: unknown }).montos = montos;
+
+    const json = JSON.stringify(base);
+    const b64 = btoa(unescape(encodeURIComponent(json)));
+    const url = `/platf/cotizaciones/ticket?d=${encodeURIComponent(b64)}&auto=1`;
+    window.open(url, "_blank");
     setTicketLoadingId("");
   }
 
@@ -373,9 +306,9 @@ export default function ReportesPage() {
       if (!admin) {
         query = query
           .eq("enviado_por_user_id", user.id)
-          .in("status", ["aceptada", "exitosa"]);
+          .in("status", ["aceptada", "aceptadas", "exitosa"]);
       } else {
-        query = query.eq("status", "aceptada");
+        query = query.in("status", ["aceptada", "aceptadas", "exitosa"]);
       }
 
       query = query.limit(500);
@@ -510,7 +443,7 @@ export default function ReportesPage() {
                 </div>
                 <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
                   <div className="rounded-lg border border-black/[.08] bg-zinc-50 px-3 py-2 text-xs font-medium uppercase tracking-wide text-zinc-600">
-                    Estatus: Aceptada
+                    Estatus: Aceptada / Exitosa
                   </div>
 
                   <label className="flex flex-col gap-1">
